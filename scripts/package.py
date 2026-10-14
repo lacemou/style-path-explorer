@@ -2,7 +2,7 @@
 import hashlib,json,zipfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-SOURCE_FILES=['index.html','styles.css','app.mjs','core.mjs','favicon.svg','README.md','REBUILD.md','VERIFICATION.md','LICENSE','ASSET_LICENSE.md','THIRD_PARTY_NOTICES.md','requirements.txt','start-preview.ps1','.gitignore','.nojekyll']
+SOURCE_FILES=['index.html','styles.css','app.mjs','core.mjs','favicon.svg','README.md','REBUILD.md','VERIFICATION.md','LICENSE','ASSET_LICENSE.md','THIRD_PARTY_NOTICES.md','requirements.txt','start-preview.ps1','.gitignore','.gitattributes','.nojekyll']
 SOURCE_DIRS=['assets','data','scripts','tests','research','screenshots']
 WEB_FILES=['index.html','styles.css','app.mjs','core.mjs','favicon.svg','LICENSE','ASSET_LICENSE.md','THIRD_PARTY_NOTICES.md','.nojekyll']
 WEB_DIRS=['assets','data']

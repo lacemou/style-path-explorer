@@ -40,7 +40,7 @@ def main():
     raw = json.dumps({'styles':rows,'files':manifest},ensure_ascii=False,sort_keys=True).encode()
     version = str(len(rows)) + '-' + hashlib.sha256(raw).hexdigest()[:12]
     revision = args.revision or (REVISION if args.upstream else 'custom')
-    catalog = {'version':version,'upstreamRevision':revision,'count':len(rows),'styles':rows}
+    catalog = {'version':version,'upstreamRepository':'yang0/handraw-style' if args.upstream else 'custom','upstreamRevision':revision,'count':len(rows),'styles':rows}
     (data/'catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2),encoding='utf-8')
     (data/'examples.json').write_text(json.dumps({'datasetVersion':version,'reviewState':'not_reviewed','pairs':[]}),encoding='utf-8')
     repair=[{'id':'046','method':'contact_sheet_crop','source':'images/B_036-048.png','sourceSha256':'ccb6580124b895b321ae24a56de7e76d26efba6363057e334768f338655859ea','cropBox':[527,630,730,960]}] if args.upstream and revision==REVISION else []

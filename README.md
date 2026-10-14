@@ -83,9 +83,12 @@ python scripts/prepare.py --source ./input
 ```bash
 node tests/core.test.mjs
 python scripts/verify.py
+python tests/rebuild_smoke.py
 ```
 
 验证路径边界与平局、上游模板一致性、分享链接不包含主题、资料版本和资产哈希。浏览器检查记录见 [VERIFICATION.md](VERIFICATION.md)。
+
+替换库冒烟检查在忽略的.runtime目录中运行，不覆盖附带资料；已验证1张和3张的小库可重建。
 
 ## 许可与致谢
 
