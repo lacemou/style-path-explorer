@@ -1,0 +1,14 @@
+.runtime/
+.venv/
+__pycache__/
+PROJECT_SPEC.md
+ANTIGRAVITY_HANDOFF.md
+research/avatar-expansion-20261014/
+output/
+*.log
+.env*
+private-notes/
+scripts/expand_avatar_library.py
+scripts/migrate_display_ids.py
+prototypes/
+data/archive/
