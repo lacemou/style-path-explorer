@@ -1,6 +1,6 @@
 # 使用已有 Nginx 部署
 
-此项目为纯静态网站，无需 Node 服务、数据库、AI 模型或 API Key。部署包为 `output/style-path-explorer-website.zip`；仅包含页面实际使用的资源，不包含 `.git`、运行缓存、内部笔记和保留的头像PNG原图。
+此项目为纯静态网站，无需 Node 服务、数据库、AI 模型或 API Key。部署包为 `output/style-path-explorer-website.zip`；仅包含页面实际使用的资源，不包含 `.git`、运行缓存、内部笔记和历史头像PNG原图。
 
 ## 1. 检查已有服务
 

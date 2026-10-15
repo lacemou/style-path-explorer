@@ -2,7 +2,7 @@
 
 ## 网页图片与原图
 
-330版的网页头像采用512×512 WebP。新增69张的1254×1254 PNG原图保留在Git仓库中，部署ZIP和源码ZIP按当前清单收录网页副本，不额外打包原图。转换脚本为 `python scripts/optimize_avatars.py`，记录位于 `data/manifest.json` 的 `displayOptimization`；已转换时只复核导出文件哈希。
+330版的网页头像采用512×512 WebP。新增69张的1254×1254 PNG原图已从当前Git版本移除；历史提交仍保留原图，部署ZIP和源码ZIP仅收录网页副本。转换脚本为 `python scripts/optimize_avatars.py`，记录位于 `data/manifest.json` 的 `displayOptimization`；已转换时只复核导出文件哈希。清单中的 originalPath 和 originalSha256 是历史来源记录，不表示原图仍存在；如需从头转换，须自行提供与记录哈希一致的原图。
 
 本次仅改变显示资源，寻路图的连接与权重沿用原始图片的预计算结果。资料和图版本随资源变化更新，旧330版分享链接和收藏有显式兼容记录。历史模型报告仍保留原始实验版本，不能当作WebP重新提取特征的报告。若需要从网页副本重新提取特征，仍按下方流程完整运行，不把旧特征缓存改名当作新计算结果。
 

@@ -1,4 +1,5 @@
-"""Export the 69 original PNG avatars as 512px WebP without changing artwork."""
+"""Export 69 source PNG avatars as 512px WebP. Originals are no longer bundled;
+provide hash-matching source files to rerun the initial conversion."""
 import hashlib
 import json
 from pathlib import Path
