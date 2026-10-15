@@ -33,7 +33,7 @@ def build(features,k,quantile):
     return adj,dist,limit
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--methods',nargs='+',default=['baseline','dino','clip']);p.add_argument('--select');p.add_argument('--k',type=int,default=5);p.add_argument('--quantile',type=float,default=.90);p.add_argument('--pairs',type=Path,help='Optional JSON endpoint pairs for your own library');args=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--methods',nargs='+',default=['baseline','dino','clip']);p.add_argument('--select');p.add_argument('--k',type=int,default=5);p.add_argument('--quantile',type=float,default=.90);p.add_argument('--pairs',type=Path,help='Optional JSON endpoint pairs for your own library');p.add_argument('--report-dir',type=Path,help='Keep rebuild reports separate from previous research');args=p.parse_args()
     if args.k<1 or not 0<args.quantile<=1:p.error('k must be positive and quantile in (0,1]')
     cat=json.loads((ROOT/'data/catalog.json').read_text(encoding='utf-8'));ids=[s['id'] for s in cat['styles']]
     pairs=json.loads(args.pairs.read_text()) if args.pairs else [p for p in PAIRS if all(id in ids for id in p)]
@@ -52,7 +52,7 @@ def main():
         graph={'datasetVersion':cat['version'],'method':method,'config':{'neighbors':args.k,'symmetric':'union','maxEdgeQuantile':args.quantile,'maxEdgeDistance':round(limit,7)},'ids':ids,'adjacency':adj}
         graph['version']=hashlib.sha256(json.dumps(graph,sort_keys=True).encode()).hexdigest()[:12];graphs[method]=graph
         all_neighbors[method]=[[ids[int(i)] for i in np.argsort(dist[j],kind='stable')[:6]] for j in range(len(ids))]
-    out=ROOT/'research';out.mkdir(exist_ok=True)
+    out=args.report_dir or ROOT/'research';out.mkdir(parents=True,exist_ok=True)
     (out/'comparison.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
     comparison={'datasetVersion':cat['version'],'methods':report,'neighbors':all_neighbors}
     (out/'comparison-data.js').write_text('window.COMPARISON='+json.dumps(comparison,ensure_ascii=False)+';',encoding='utf-8')

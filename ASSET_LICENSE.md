@@ -1,6 +1,6 @@
 # 头像素材许可
 
-`assets/avatars/` 中的261张头像由 YJ / AI不会累 提供，用于画风迁移示例。
+`assets/avatars/` 中的330张头像由 YJ / AI不会累 提供，用于画风迁移示例。新增69张已生成，未检查；许可范围不表示视觉验收或公开发布完成。
 
 就 YJ 有权许可的作品部分，采用 **Creative Commons Attribution 4.0 International (CC BY 4.0)**：
 

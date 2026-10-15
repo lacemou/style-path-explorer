@@ -1,22 +1,331 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111315"><meta name="description" content="在261种手绘画风之间找一条路，发现喜欢的画风，带走生图提示词。"><title>画风之间 · AI不会累</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FFFFFF">
+  <meta name="description" content="画风之间 · 在330种艺术风格的潜在空间中，寻找一条相连的路。">
+  <title>画风之间 · 艺术风格拓扑探索</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
 <body>
-<header class="topbar"><a class="brand" href="./" aria-label="AI不会累，返回首页"><span class="brand-mark" aria-hidden="true">↗</span><span>AI不会累<small>YJ陪你追。</small></span></a><nav><button id="collection-link">浏览画风 <span id="total-count">261</span></button><button id="favorites-link">我的收藏 <span id="saved-count">0</span></button><a href="https://github.com/yang0/handraw-style" target="_blank" rel="noopener">上游画风库 ↗</a></nav></header>
-<main>
-<section class="intro"><div><p class="eyebrow"><span></span> A JOURNEY BETWEEN STYLES</p><h1>从一种画风，<br class="mobile-break">走到另一种。</h1><p class="lede">选两张头像，看看它们之间会经过什么。沿途遇到喜欢的画风，就把提示词带走。</p></div><div class="intro-side"><span class="library-number" id="library-total">261<small>种手绘画风</small></span><button id="random-pair" class="text-button">换一组，去看看 <span>↗</span></button></div></section>
-<section class="journey" aria-labelledby="journey-heading">
-<div class="journey-toolbar"><div><span class="section-index">01 /</span><h2 id="journey-heading">画风之间</h2><span id="route-count" class="muted"></span></div><button id="share-route" class="text-button">分享这条路 ↗</button></div>
-<div class="endpoint-bar"><button id="pick-from" class="endpoint"><span class="endpoint-label">从这里出发</span><span class="endpoint-info" id="from-info">选择起点</span><span class="endpoint-icon">↗</span></button><div class="endpoint-bridge"><span></span><button id="swap" aria-label="交换起点与终点">⇄</button><span></span></div><button id="pick-to" class="endpoint"><span class="endpoint-label">走到这里</span><span class="endpoint-info" id="to-info">选择终点</span><span class="endpoint-icon">↗</span></button></div>
-<div id="route" class="route" aria-live="polite"><p class="loading">正在打开画风库…</p></div>
-<div class="route-footer"><p id="route-note">每一张都是已有画风。点击图片，放大看看。</p><div id="examples" class="examples" aria-label="示例配对"></div></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="./" aria-label="画风之间">
+      <span class="brand-symbol" aria-hidden="true">
+        <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+          <circle cx="4" cy="6" r="3" fill="#2597D0"/>
+          <line x1="7" y1="6" x2="13" y2="6" stroke="#2597D0" stroke-width="1.5" stroke-dasharray="1.5 1.5"/>
+          <circle cx="16" cy="6" r="3" fill="#070709"/>
+        </svg>
+      </span>
+      <span class="brand-title">画风之间</span>
+      <span class="brand-sub">STYLE PATH</span>
+    </a>
+    <nav class="top-nav">
+      <button id="collection-link" type="button">画风编目 <span id="total-count" class="nav-count">330</span></button>
+      <button id="favorites-link" type="button">收藏 <span id="saved-count" class="nav-count">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="intro-inner">
+    <h1 class="hero-title">画风之间</h1>
+    <p class="hero-subtitle">在 330 种艺术风格的潜在空间中，寻找一条相连的路。</p>
+    <p class="lede">
+      选定任意两端，观察算法如何在由既有画风构成的网络中寻获连贯的过渡轨迹。
+      漫步于潜在空间，对比艺术原典与生成样张，取走提示词。
+    </p>
+
+    <!-- 扇形画风展台（凹凸有序展开，联动起点与终点） -->
+    <div id="hero-fan" class="hero-fan" aria-label="画风扇形展台"></div>
+  </div>
+  <div class="hero-fade-overlay" aria-hidden="true"></div>
 </section>
-<section id="library" class="library" aria-labelledby="library-heading"><div class="library-header"><div><p class="eyebrow">THE COLLECTION</p><h2 id="library-heading">下一站，你来选。</h2></div><div id="selection-notice" class="selection-notice" hidden><span id="selection-text"></span><button id="cancel-selection">取消</button></div></div>
-<div class="filterbar"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜编号、画风或关键词" aria-label="搜索画风"></label><label class="category"><span class="sr-only">画风分类</span><select id="category"><option value="">全部分类</option></select></label><button id="filter-favorites" aria-pressed="false">只看收藏 <span>♡</span></button><span id="visible-count" class="muted"></span></div>
-<div id="grid" class="grid"></div><div id="empty-grid" class="empty" hidden>这里还没有画风。试试其他关键词，或先收藏一张。</div></section>
+
+<main>
+  <section class="journey" aria-labelledby="journey-heading">
+    <div class="journey-header">
+      <div class="journey-title-meta">
+        <span class="curatorial-label">STAGE 01</span>
+        <h2 id="journey-heading">流变路径</h2>
+        <span id="route-count" class="route-counter"></span>
+      </div>
+      <div class="journey-actions">
+        <button id="random-pair" class="random-pair-btn" type="button">换一组配对</button>
+        <button id="share-route" class="share-trigger-btn" type="button">分享路径</button>
+      </div>
+    </div>
+
+    <div class="stage-vitrine">
+      <div class="endpoint-bar">
+        <button id="pick-from" class="endpoint-card" type="button" aria-label="选择起点画风">
+          <div class="endpoint-mount">
+            <img id="from-thumb" class="endpoint-img" alt="" hidden>
+            <span class="endpoint-empty-tip" id="from-placeholder">选择起点</span>
+          </div>
+          <div class="endpoint-info-block">
+            <span class="endpoint-role">起点 · DEPARTURE</span>
+            <span class="endpoint-name" id="from-info">选择起点</span>
+          </div>
+        </button>
+
+        <div class="bridge-axis">
+          <span class="axis-line"></span>
+          <button id="swap" class="swap-action-btn" aria-label="交换起点与终点" type="button" title="交换起点与终点">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/>
+            </svg>
+          </button>
+          <span class="axis-line"></span>
+        </div>
+
+        <button id="pick-to" class="endpoint-card" type="button" aria-label="选择终点画风">
+          <div class="endpoint-mount">
+            <img id="to-thumb" class="endpoint-img" alt="" hidden>
+            <span class="endpoint-empty-tip" id="to-placeholder">选择终点</span>
+          </div>
+          <div class="endpoint-info-block">
+            <span class="endpoint-role">终点 · DESTINATION</span>
+            <span class="endpoint-name" id="to-info">选择终点</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="route-rail-container">
+        <div id="route" class="route" aria-live="polite">
+          <p class="loading">正在连接画风网络…</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-footer">
+      <div class="curatorial-disclaimer">
+        <p id="route-note">每一张均为既有画风，基于特征余弦距离寻路。点击图片放大，对比原典与提示词。</p>
+      </div>
+      <div class="featured-routes-bar">
+        <span class="routes-label">示例</span>
+        <div id="examples" class="examples" aria-label="示例配对"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="library" class="library" aria-labelledby="library-heading">
+    <div class="library-header">
+      <div class="library-title-group">
+        <span class="curatorial-label">ARCHIVE</span>
+        <h2 id="library-heading">画风编目</h2>
+        <p class="library-intro">点击卡片查看原典大图与提示词，或设为新端点；桌面端支持将卡片直接拖入上方展台。</p>
+      </div>
+      <div id="selection-notice" class="selection-notice" hidden>
+        <span class="notice-indicator"></span>
+        <span id="selection-text"></span>
+        <button id="cancel-selection" type="button">取消</button>
+      </div>
+    </div>
+
+    <div class="filterbar">
+      <div class="search-box">
+        <span class="search-symbol" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input id="search" type="search" placeholder="检索画风编号 #062、名称或关键词..." aria-label="搜索画风">
+      </div>
+      <div class="category-box">
+        <select id="category" aria-label="画风分类">
+          <option value="">全部分类</option>
+        </select>
+      </div>
+      <button id="filter-favorites" type="button" aria-pressed="false">
+        <span class="fav-symbol">♥</span> 我的收藏
+      </button>
+      <span id="visible-count" class="archive-counter"></span>
+    </div>
+
+    <div id="grid" class="grid"></div>
+    <div id="empty-grid" class="empty" hidden>
+      <p>未找到符合条件的画风。</p>
+      <small>可更换关键词检索，或取消“我的收藏”筛选。</small>
+    </div>
+
+    <div class="catalog-bottom-action">
+      <button id="bottom-back-journey" class="bottom-journey-btn" type="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        <span>返回流变路径</span>
+      </button>
+    </div>
+  </section>
 </main>
-<footer><span>AI不会累，YJ陪你追。</span><p>画风资料与提示词来自 <a href="https://github.com/yang0/handraw-style" target="_blank" rel="noopener">yang0 / handraw-style</a>。视觉连接用于探索，不代表画风融合或生成效果保证。</p><a href="THIRD_PARTY_NOTICES.md">来源与许可 ↗</a></footer>
-<dialog id="detail"><button id="close-detail" class="close-button" aria-label="关闭画风详情">×</button><div class="detail-layout"><div class="detail-visual"><img id="detail-image" alt=""><div class="detail-selection"><button id="detail-from">设为起点 ↗</button><button id="detail-to">设为终点 ↗</button></div></div><div class="detail-content"><p id="detail-number" class="eyebrow"></p><h2 id="detail-name"></h2><p id="detail-author" class="muted"></p><p id="detail-traits" class="traits"></p><button id="save-style" class="save-button" aria-pressed="false">♡ 收藏这个画风</button><div class="prompt-section"><h3>把这个画风带走。</h3><label class="field">你想画什么？<input id="theme" placeholder="例如：周末咖啡馆（留空则导出模板）" maxlength="1200"></label><details class="extra-options"><summary>补充画幅、主体或文字要求</summary><div class="extras"><label class="field">画幅<input id="ratio" placeholder="例如：3:4" maxlength="50"></label><label class="field">主体限制<input id="subject" placeholder="按你的需要填写" maxlength="500"></label><label class="field">文字要求<input id="text-requirement" placeholder="没有则留空" maxlength="500"></label></div></details><div class="prompt-tabs" role="tablist" aria-label="提示词语言"><button id="tab-zh" role="tab" aria-selected="true">中文</button><button id="tab-en" role="tab" aria-selected="false">English</button></div><textarea id="prompt-output" readonly aria-label="上游规则输出的提示词"></textarea><p class="prompt-note">沿用上游固定版本模板，主题保持原文。英文模板不会自动翻译你的主题。</p><div class="prompt-actions"><button id="copy-prompt" class="primary">复制提示词 <span>↗</span></button><button id="download-prompt" class="secondary">下载 TXT ↓</button></div><div class="reference-row"><a id="reference-link" href="#" download>下载画风参考图 ↓</a><button id="reference-help">怎么使用？</button></div><p id="reference-instruction" class="reference-instruction" hidden></p><p id="prompt-source" class="source-note"></p></div></div></div></dialog>
-<dialog id="share-dialog"><button class="close-button" id="close-share" aria-label="关闭分享">×</button><h2>把这条路分享出去。</h2><p>链接只记录两个端点与版本，不包含你的主题或收藏。</p><input id="share-output" readonly aria-label="路线分享链接"><button id="copy-share" class="primary">复制链接 ↗</button></dialog>
-<div id="toast" class="toast" role="status" aria-live="polite"></div><script type="module" src="app.mjs"></script>
-</body></html>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-meta">
+      <strong>画风之间 · STYLE PATH EXPLORER</strong>
+      <p>画风资料与提示词规范源自 yang0 / handraw-style。视觉连接基于模型特征余弦距离，用于艺术探索，不代表画风实时插值融合。</p>
+    </div>
+    <div class="footer-links">
+      <a href="notices.html">来源与许可说明</a>
+      <a href="https://github.com/yang0/handraw-style" target="_blank" rel="noopener">上游画风参考</a>
+    </div>
+  </div>
+  <span id="library-total" hidden></span>
+</footer>
+
+<!-- 画风详情与原典对比模态框 -->
+<dialog id="detail">
+  <div class="detail-modal-header">
+    <div class="detail-header-left">
+      <span id="detail-number" class="detail-number-tag"></span>
+      <h2 id="detail-name" class="detail-title"></h2>
+    </div>
+    <div class="detail-header-right">
+      <button id="save-style" class="save-button" aria-pressed="false" type="button">♡ 收藏</button>
+      <button id="close-detail" class="close-button" aria-label="关闭详情" type="button">✕</button>
+    </div>
+  </div>
+
+  <div class="detail-modal-body">
+    <!-- 左栏：双画板原典对照 -->
+    <div class="detail-visual">
+      <div class="dual-specimen-grid">
+        <div class="specimen-card">
+          <div class="specimen-frame">
+            <img id="detail-reference-image" alt="原典参考图">
+          </div>
+          <div class="specimen-meta">
+            <span class="specimen-tag">原典参考</span>
+            <span class="specimen-desc">风格艺术原作 · 借用线条与笔触</span>
+          </div>
+        </div>
+
+        <div class="specimen-card">
+          <div class="specimen-frame">
+            <img id="detail-image" alt="头像样张">
+          </div>
+          <div class="specimen-meta">
+            <span class="specimen-tag">头像测试样张</span>
+            <span class="specimen-desc">基准人物测试 · 该画风生图表现</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="specimen-actions">
+        <div class="endpoint-assign-buttons">
+          <button id="detail-from" type="button">设为起点</button>
+          <button id="detail-to" type="button">设为终点</button>
+        </div>
+        <div class="reference-download-bar">
+          <a id="reference-link" href="#" download>下载原典参考图</a>
+          <button id="reference-help" type="button">使用说明</button>
+        </div>
+        <p id="reference-instruction" class="reference-instruction" hidden></p>
+      </div>
+    </div>
+
+    <!-- 右栏：策展档案与取词工坊 -->
+    <div class="detail-content">
+      <div class="dossier-block">
+        <p id="detail-author" class="dossier-author"></p>
+        <div class="traits-box">
+          <span class="traits-label">视觉语言特征</span>
+          <p id="detail-traits" class="traits"></p>
+        </div>
+      </div>
+
+      <div class="prompt-studio">
+        <div class="studio-header">
+          <h3>创作取词</h3>
+          <p class="studio-desc">输入你的创作主题，即刻导出中英文生图提示词。</p>
+        </div>
+
+        <label class="field-group">
+          <span class="field-title">创作主题</span>
+          <input id="theme" placeholder="例如：周末街角下雨天的咖啡馆（留空则导出通用结构）" maxlength="1200">
+        </label>
+
+        <details class="constraints-accordion">
+          <summary>可选高级约束：画幅、主体限制、画面文字</summary>
+          <div class="constraints-content">
+            <label class="field-group">
+              <span class="field-title">生图模型（决定是否需要特征和参考图）</span>
+              <select id="prompt-model">
+                <option value="gpt-image-2">GPT Image 2（上游默认）</option>
+                <option value="unknown">其他／不确定（特征＋参考图）</option>
+              </select>
+            </label>
+            <label class="field-group">
+              <span class="field-title">画幅比例</span>
+              <input id="ratio" placeholder="例如：3:4 或 16:9" maxlength="50">
+            </label>
+            <label class="field-group">
+              <span class="field-title">主体限制</span>
+              <input id="subject" placeholder="例如：单人特写，无背景杂物" maxlength="500">
+            </label>
+            <label class="field-group">
+              <span class="field-title">画面文字</span>
+              <input id="text-requirement" placeholder="例如：无文字排版" maxlength="500">
+            </label>
+          </div>
+        </details>
+
+        <div class="prompt-language-bar">
+          <div class="prompt-tabs" role="tablist" aria-label="提示词语言">
+            <button id="tab-zh" role="tab" aria-selected="true" type="button">中文提示词</button>
+            <button id="tab-en" role="tab" aria-selected="false" type="button">English Prompt</button>
+          </div>
+        </div>
+
+        <div class="prompt-code-wrap">
+          <textarea id="prompt-output" readonly aria-label="上游规则输出的提示词"></textarea>
+        </div>
+
+        <p class="prompt-note">沿用上游固定版本模板，主题保持原文。英文模板不会自动翻译中文主题。</p>
+
+        <div class="prompt-button-row">
+          <button id="copy-prompt" class="primary-btn" type="button">复制提示词</button>
+          <button id="download-prompt" class="secondary-btn" type="button">下载 TXT 文件</button>
+        </div>
+
+        <p id="prompt-source" class="source-note"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-modal-footer">
+    <button id="detail-back-journey" class="modal-footer-btn" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      返回流变路径
+    </button>
+  </div>
+</dialog>
+
+<!-- 分享模态框 -->
+<dialog id="share-dialog">
+  <div class="share-dialog-card">
+    <div class="share-dialog-top">
+      <h2>分享路线</h2>
+      <button class="close-button" id="close-share" aria-label="关闭分享" type="button">✕</button>
+    </div>
+    <p class="share-desc">链接记录两个端点编号与固定数据版本，不包含个人主题或私有收藏，可在任何设备精确重现。</p>
+    <div class="share-field">
+      <input id="share-output" readonly aria-label="路线分享链接">
+      <button id="copy-share" class="primary-btn" type="button">复制链接</button>
+    </div>
+  </div>
+</dialog>
+
+<button id="floating-back-journey" class="floating-back-journey" type="button" aria-label="返回流变路径">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  <span>返回流变路径</span>
+</button>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="app.mjs"></script>
+</body>
+</html>

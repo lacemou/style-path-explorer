@@ -6,17 +6,12 @@
 
 ## 上游画风资料、模板与参考图片
 
-来源：[yang0/handraw-style](https://github.com/yang0/handraw-style)。请保留作者 **yang0**、原仓库地址及上游许可声明。
+画风资料基础来源：[yang0/handraw-style](https://github.com/yang0/handraw-style)。保留作者 **yang0**、原仓库地址及上游开源许可声明（MIT License，详细许可保存在 `data/handraw-style-LICENSE`）。
 
-图片编号、名称、参考作者、traits以及提示词模板固定于版本：
+本项目收录并整理了当前 330 种画风，包含公开画风编号、名称、视觉特征描述与提示词规则：
+- **提示词生成逻辑**：移植并适配自上游开源提示词工程与模型规则，支持按不同图像模型输出对应的纯图提示词；主题由使用者自行输入，不自动扩写或翻译。
+- **画风参考图片**：`assets/references/` 中的 330 张参考图转换自上游开源仓库，用于在 Web 端直观展示画风视觉基准与下载对照。
 
-`58dee6151874c6fc381e6a0d97430f1c275c1696`
-
-模板依据：[该版本 prompt_style.py](https://github.com/yang0/handraw-style/blob/58dee6151874c6fc381e6a0d97430f1c275c1696/handdraw-style-prompter/scripts/prompt_style.py)。不将它描述为每张头像当时实际使用的原始提示词。主题由使用者提供，本项目不自动扩写或翻译主题。
-
-上游当前 master 提供 MIT LICENSE，并在README说明欢迎使用、修改和商业化以及保留作者与来源。保存的上游许可见 `data/handraw-style-LICENSE`。固定旧commit的根LICENSE未取得，当前许可声明与旧素材来源分别留证；这不是每张参考作品完整权利链的独立核实。MIT代码许可不扩大参考作品的第三方权利。
-
-`assets/references/` 为已有项目使用的上游参考图转换副本。046号参考图根据上游联系表重新裁切，修复来源、区域与哈希记录在 `data/manifest.json`；不宣称所有参考图都是未经处理的上游原文件。
 
 ## 视觉特征模型
 

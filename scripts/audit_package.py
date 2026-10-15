@@ -1,15 +1,28 @@
-"""Inspect the explicit archive manifest and scan text for private paths/keys."""
-import re, zipfile
-from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]
-with zipfile.ZipFile(ROOT/'output/style-path-explorer-source.zip') as z:
-    forbidden=[n for n in z.namelist() if any(t in n for t in ('.runtime/','.venv/','.env','PROJECT_SPEC','private-notes/','output/','__pycache__/'))]
-    assert not forbidden,forbidden
-    pattern=re.compile(r'(?:[CDHE]:[/\\])|(?:sk-[A-Za-z0-9_-]{20,})')
-    findings=[]
-    for n in z.namelist():
-        if n.endswith(('.md','.json','.js','.mjs','.py','.html','.ps1')):
-            content=z.read(n).decode('utf-8',errors='strict')
-            findings.extend((n,m.group()) for m in pattern.finditer(content))
-    assert not findings,findings
-    print(f'Archive audit passed: {len(z.namelist())} files; no runtime caches, planning notes, private drive paths or key-pattern matches.')
+"""Verify both ZIPs against the public manifest, current bytes and privacy rules."""
+import zipfile
+from audit_privacy import findings
+from release_manifest import ROOT, release_paths
+
+
+def audit_archives():
+    hits = []
+    for kind in ('source', 'website'):
+        expected = set(release_paths(kind))
+        with zipfile.ZipFile(ROOT / f'output/style-path-explorer-{kind}.zip') as archive:
+            names = archive.namelist()
+            if len(names) != len(set(names)) or set(names) != expected:
+                raise ValueError(f'{kind} ZIP does not match the public manifest')
+            for name in names:
+                content = archive.read(name)
+                if content != (ROOT / name).read_bytes():
+                    raise ValueError(f'{kind} ZIP contains stale bytes: {name}')
+                hits.extend(findings(f'{kind}.zip/{name}', content))
+        print(f'{kind} ZIP: {len(expected)} files; exact manifest and current bytes verified.')
+    return hits
+
+
+if __name__ == '__main__':
+    issues = audit_archives()
+    for name, line, kind in issues:
+        print(f'{name}:{line}: {kind} (value redacted)')
+    raise SystemExit(1 if issues else 0)
