@@ -1,0 +1,35 @@
+# Replace the example domain. Load this server block from an existing http context.
+server {
+    listen 80;
+    server_name stylepath.example.com;
+    root /var/www/style-path-explorer/current;
+    index index.html;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # JavaScript modules require a JavaScript MIME type.
+    location ~ \.mjs$ {
+        types { application/javascript mjs; }
+        add_header Cache-Control "no-cache";
+        try_files $uri =404;
+    }
+
+    location ~* \.(html|json|js|css)$ {
+        add_header Cache-Control "no-cache";
+        try_files $uri =404;
+    }
+
+    location ~* \.(webp|png|jpg|jpeg|svg)$ {
+        expires 7d;
+        try_files $uri =404;
+    }
+
+    location ~ /\.(?!well-known/) {
+        deny all;
+    }
+}

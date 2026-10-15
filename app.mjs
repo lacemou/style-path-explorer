@@ -861,7 +861,10 @@ async function start() {
         renderRoute();
       }
     } else if (from || to) {
-      if (params.get('v') !== catalog.version || params.get('g') !== graph.version) {
+      const matchingCurrent = params.get('v') === catalog.version && params.get('g') === graph.version;
+      const matchingWebExport = (graph.compatibleShareVersions || []).some(version =>
+        version.datasetVersion === params.get('v') && version.graphVersion === params.get('g'));
+      if (!matchingCurrent && !matchingWebExport) {
         routeError('该分享链接来自其他版本，当前素材库无法重现。你可以浏览精选路线或自由探索。');
         return;
       }

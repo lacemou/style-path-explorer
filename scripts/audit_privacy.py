@@ -8,7 +8,7 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-TEXT_SUFFIXES = {'.md', '.txt', '.json', '.js', '.mjs', '.cjs', '.py', '.html', '.css', '.svg', '.ps1', '.yml', '.yaml', '.toml', '.ini', '.cfg', '.conf', '.sh', '.bat', '.cmd', '.csv', '.xml', '.sql', '.log', '.rst'}
+TEXT_SUFFIXES = {'.md', '.txt', '.json', '.js', '.mjs', '.cjs', '.py', '.html', '.css', '.svg', '.ps1', '.yml', '.yaml', '.toml', '.ini', '.cfg', '.conf', '.example', '.sh', '.bat', '.cmd', '.csv', '.xml', '.sql', '.log', '.rst'}
 PATTERNS = {
     'absolute-user-path': re.compile(r'(?i)\b[A-Z]:[\\/][^\s\x22\x27<>]+|/(?:Users|home|root)/[^\s\x22\x27<>]+'),
     'private-key': re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
