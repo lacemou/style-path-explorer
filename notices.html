@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FFFFFF">
+  <title>来源、版本与许可说明 · 画风之间</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .notices-page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .notices-header {
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--line-hairline);
+      padding-bottom: 24px;
+    }
+    .notices-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--surgical-blue);
+      text-decoration: none;
+      margin-bottom: 16px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--sky-subtle);
+      transition: all var(--transition-fast);
+    }
+    .notices-back:hover {
+      background: #DCEEF8;
+      color: #17658C;
+    }
+    .notices-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--obsidian);
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+    .notices-subtitle {
+      font-size: 14px;
+      color: var(--slate);
+      margin: 0;
+    }
+    .notices-section {
+      margin-bottom: 32px;
+      background: var(--paper-white);
+      border: 1px solid var(--line-hairline);
+      border-radius: var(--radius-card);
+      padding: 24px 28px;
+      box-shadow: 0 1px 3px rgba(7, 7, 9, 0.02);
+    }
+    .notices-section h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--obsidian);
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .notices-section p, .notices-section li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin: 0 0 12px;
+    }
+    .notices-section p:last-child {
+      margin-bottom: 0;
+    }
+    .notices-section ul {
+      margin: 0 0 12px;
+      padding-left: 20px;
+    }
+    .notices-section li {
+      margin-bottom: 8px;
+    }
+    .notices-section a {
+      color: var(--surgical-blue);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .notices-section a:hover {
+      color: #17658C;
+    }
+    .raw-link {
+      font-size: 12px;
+      color: var(--slate);
+      margin-top: 24px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<div class="notices-page">
+  <header class="notices-header">
+    <a href="./" class="notices-back">← 返回画风之间</a>
+    <h1 class="notices-title">来源、版本与许可说明</h1>
+    <p class="notices-subtitle">画风之间（Style Path Explorer）使用的第三方资产、开源模型与授权范围说明</p>
+  </header>
+
+  <article class="notices-section">
+    <h2>1. 原创部分</h2>
+    <p>前端交互、图数据构建工具、实验对照与原创文档采用 <a href="LICENSE" target="_blank">MIT License</a>。</p>
+    <p>头像生成物中由创作者有权授权的部分采用 <a href="ASSET_LICENSE.md" target="_blank">CC BY 4.0 许可协议</a>。</p>
+  </article>
+
+  <article class="notices-section">
+    <h2>2. 上游画风资料、模板与参考图片</h2>
+    <p>画风资料基础来源：<a href="https://github.com/yang0/handraw-style" target="_blank" rel="noopener">yang0 / handraw-style</a>。保留作者 <strong>yang0</strong>、原仓库地址及上游开源许可声明（MIT License，详细许可保存在 <code>data/handraw-style-LICENSE</code>）。</p>
+    <p>本项目收录并整理了当前 330 种画风，包含公开画风编号、名称、视觉特征描述与提示词规则：</p>
+    <ul>
+      <li><strong>提示词生成逻辑</strong>：移植并适配自上游开源提示词工程与模型规则，支持按不同图像模型输出对应的纯图提示词；主题由使用者自行输入，不自动扩写或翻译。</li>
+      <li><strong>画风参考图片</strong>：<code>assets/references/</code> 中的 330 张参考图转换自上游开源仓库，用于在 Web 端直观展示画风视觉基准与下载对照。</li>
+    </ul>
+  </article>
+
+  <article class="notices-section">
+    <h2>3. 视觉特征模型</h2>
+    <ul>
+      <li><a href="https://github.com/facebookresearch/dinov2" target="_blank" rel="noopener">DINOv2</a>：标准模型及代码采用 Apache-2.0 协议。正式图数据由 ViT-S/14 图像特征构建。模型权重不随本仓库分发。</li>
+      <li><a href="https://github.com/mlfoundations/open_clip" target="_blank" rel="noopener">OpenCLIP</a>：代码采用 MIT 协议；对照实验使用 <a href="https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K" target="_blank" rel="noopener">LAION ViT-B/32 指定权重</a>，模型卡标明 MIT。</li>
+      <li>固定代码版本、权重版本和文件 SHA-256 哈希参见 <code>research/model-lock.json</code>。</li>
+    </ul>
+  </article>
+
+  <article class="notices-section">
+    <h2>4. 交互灵感</h2>
+    <p>本项目受到 Google Arts &amp; Culture 的 <a href="https://artsexperiments.withgoogle.com/xdegrees/" target="_blank" rel="noopener">X Degrees of Separation</a> 启发，机制参考其公开的图像近邻与寻路说明。</p>
+    <p>本项目自行实现界面与算法，未复制 Google 网站源码，未使用 Google 馆藏图片或其模型接口，亦不与 Google 存在官方关联。</p>
+  </article>
+
+  <div class="raw-link">
+    <a href="THIRD_PARTY_NOTICES.md" target="_blank">查看原始 Markdown 文档 (THIRD_PARTY_NOTICES.md)</a>
+  </div>
+</div>
+
+</body>
+</html>
