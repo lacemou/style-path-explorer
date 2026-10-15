@@ -86,7 +86,20 @@ function toggleFavorite(id) {
   if (state.detail) updateSaveButton();
 }
 
+// Native lazy loading can fetch far below the screen on constrained links.
+// Keep library requests close to the viewport and below hero image priority.
+const libraryImages = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    const img = entry.target;
+    img.src = img.dataset.src;
+    delete img.dataset.src;
+    libraryImages.unobserve(img);
+  }
+}, {rootMargin: '160px 0px'}) : null;
+
 function renderGrid() {
+  libraryImages?.disconnect();
   const q = $('search').value.trim().toLowerCase();
   const internalQuery = /^#?\d{1,3}$/.test(q) ? q.replace('#', '').padStart(3, '0') : null;
   const group = $('category').value;
@@ -115,7 +128,10 @@ function renderGrid() {
     button.onclick = () => state.picking ? chooseEndpoint(state.picking, style.id) : openDetail(style.id);
 
     const img = document.createElement('img');
-    img.src = style.avatar;
+    if (libraryImages) img.dataset.src = style.avatar;
+    else img.src = style.avatar;
+    img.fetchPriority = 'low';
+    img.width = img.height = 512;
     img.alt = style.name;
     img.loading = 'lazy';
     img.decoding = 'async';
@@ -141,6 +157,7 @@ function renderGrid() {
   }
 
   $('grid').replaceChildren(fragment);
+  if (libraryImages) $('grid').querySelectorAll('img[data-src]').forEach(img => libraryImages.observe(img));
   $('visible-count').textContent = `${rows.length} / ${state.catalog.count} 种`;
   $('empty-grid').hidden = rows.length > 0;
 }
@@ -346,7 +363,9 @@ function renderHeroFan(path) {
     const img = document.createElement('img');
     img.src = style.avatar;
     img.alt = style.name;
-    img.loading = 'lazy';
+    img.loading = 'eager';
+    img.fetchPriority = i === Math.floor(half) ? 'high' : 'auto';
+    img.width = img.height = 512;
     img.decoding = 'async';
     img.onerror = imageFailure;
     mount.append(img);
@@ -516,6 +535,7 @@ function openDetail(id) {
   updateSaveButton();
   updatePrompt();
   if (!$('detail').open) $('detail').showModal();
+  for (const panel of $('detail').querySelectorAll('.detail-modal-body, .detail-visual, .detail-content')) panel.scrollTop = 0;
 }
 
 function updateSaveButton() {
