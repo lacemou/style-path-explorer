@@ -1,6 +1,6 @@
 # GitHub 仓库资料
 
-状态：本地准备，尚未写入公开仓库。README 以中文读者为主；下列英文供以后填写仓库 About 使用。
+公开仓库：[lacemou/style-path-explorer](https://github.com/lacemou/style-path-explorer)。README 以中文读者为主；下列英文简介与标签用于仓库 About。
 
 ## 英文简介
 
